@@ -1,17 +1,17 @@
 import styled from 'styled-components';
 import { darken } from 'polished';
 
-export const Container = styled.div`
+export const Wrapper = styled.div`
   background: #ee4d64;
   height: 100%;
   width: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
 
-export const LoginBox = styled.div`
+export const Content = styled.div`
   padding: 50px 30px;
   height: 450px;
   width: 360px;

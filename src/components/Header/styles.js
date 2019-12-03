@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-export const LinkStyle = styled(NavLink)`
+export const LinkStyle = styled(Link)`
   color: ${props => (props.active ? '#444' : '#999')};
 `;
 
@@ -31,7 +31,7 @@ export const Container = styled.div`
       font-size: 15px;
       font-weight: bold;
       margin-left: 20px;
-      color: #999;
+      /* color: #999; */
     }
   }
 
@@ -51,7 +51,7 @@ export const Container = styled.div`
       color: #de3b3b;
       font-size: 14px;
       font-weight: normal;
-      text-align: left;
+      text-align: right;
     }
   }
 `;

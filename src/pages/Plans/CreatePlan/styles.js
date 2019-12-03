@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Content = styled.div`
   margin-top: 25px;
-  width: 1200px;
+  width: 900px;
 `;
 
 export const Container = styled.div`
@@ -21,16 +21,6 @@ export const Header = styled.div`
   span {
     font-size: 24px;
     font-weight: bold;
-  }
-
-  input {
-    background: #ffffff;
-    border: 1px solid #dddddd;
-    box-sizing: border-box;
-    border-radius: 4px;
-    font-size: 14px;
-    padding: 10px 20px;
-    width: 300px;
   }
 
   button {
@@ -61,6 +51,40 @@ export const Data = styled.div`
   align-items: center;
   border-radius: 4px;
   margin-bottom: 30px;
+
+  form {
+    width: 100%;
+    div {
+      display: flex;
+      flex-direction: row;
+
+    }
+
+    div:not(:last-child) {
+      margin-bottom: 8px;
+
+    }
+    label {
+      width: 100%;
+      font-size: 14px;
+      font-weight: bold;
+      display: flex;
+      flex-direction: column;
+      margin 0 10px;
+
+      span {
+        margin-bottom: 8px;
+      }
+    }
+    input {
+      padding: 13px 15px;
+      font-size: 16px;
+      color: #999999;
+      border-radius: 4px;
+      border: 1px solid #dddddd;
+
+    }
+  }
 
   table {
     width: 100%;

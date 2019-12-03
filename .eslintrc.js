@@ -34,6 +34,9 @@ module.exports = {
     'import/prefer-default-export':'off',
     'react-hooks/rules-of-hooks': 'error',//vai avisar de qualquer erro
     'react-hooks/exhaustive-deps': 'warn',//avisa se estiver faltando alguma dependencia
+    'no-console': ['error', {allow: ['tron']}],
+    'no-param-reassign': 'off',
+    'jsx-a11y/label-has-associated-control': 0,
   },
   settings: {
     "import/resolver": {

@@ -4,13 +4,15 @@ import { Route, Redirect } from 'react-router-dom';
 
 import DefaultLayout from '~/pages/_layouts/default';
 import AuthLayout from '~/pages/_layouts/auth';
+import {store} from '~/store';
 
 export default function RouteWrapper({
   component: Component, // a funcao vai receber um parametro component que eh renomeado para Component
   isPrivate, // demarca se eh uma rota privada ou nao
   ...rest
 }) {
-  const signed = true;
+
+  const {signed} = store.getState().auth;
 
   // se o usuario nao esta logado e eh uma area privada, entao direciona para rota /
   if (!signed && isPrivate) {

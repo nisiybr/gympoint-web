@@ -37,6 +37,7 @@ module.exports = {
     'no-console': ['error', {allow: ['tron']}],
     'no-param-reassign': 'off',
     'jsx-a11y/label-has-associated-control': 0,
+    'camelcase': 'off',
   },
   settings: {
     "import/resolver": {

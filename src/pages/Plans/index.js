@@ -22,7 +22,7 @@ export default function Plans() {
     <Container>
       <Content>
         <Header>
-          <span>Gerenciando planos</span>
+          <span>Gerenciando Planos</span>
           <div>
             <button id="ok" onClick={handleCreatePlan} type="button">
               Cadastrar

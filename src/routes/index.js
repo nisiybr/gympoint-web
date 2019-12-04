@@ -8,6 +8,7 @@ import CreateStudent from '../pages/Students/CreateStudent'; // Rotas de Autenti
 import Plans from '../pages/Plans'; // Rotas de Autenticacao
 import CreatePlan from '../pages/Plans/CreatePlan'; // Rotas de Autenticacao
 import Registrations from '../pages/Registrations'; // Rotas de Autenticacao
+import CreateRegistration from '../pages/Registrations/CreateRegistration'; // Rotas de Autenticacao
 import HelpOrders from '../pages/HelpOrders'; // Rotas de Autenticacao
 
 export default function Routes() {
@@ -22,6 +23,12 @@ export default function Routes() {
       <Route path="/plans/create" component={CreatePlan} isPrivate />
 
       <Route path="/registrations" exact component={Registrations} isPrivate />
+      <Route
+        path="/registrations/create"
+        component={CreateRegistration}
+        isPrivate
+      />
+
       <Route path="/helpOrders" exact component={HelpOrders} isPrivate />
     </Switch>
   );

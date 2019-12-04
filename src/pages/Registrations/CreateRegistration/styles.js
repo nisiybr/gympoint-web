@@ -1,68 +1,8 @@
 import styled from 'styled-components';
-import Modal from 'styled-react-modal';
-
-export const StyledModal = Modal.styled`
-
-
-
-  width: 450px;
-  height: 400px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  background-color: white;
-  border-radius: 4px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  padding: 30px;
-
-  strong {
-    font-size: 14px;
-    line-height: 16px;
-    color: #444444;
-    font-weight: bold;
-    margin-bottom: 8px;
-  }
-  p {
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 26px;
-    color: #666666;
-    box-sizing: border-box;
-    margin-bottom: 20px;
-  }
-
-  form {
-    display: flex;
-    flex-direction: column;
-
-    width: 100%;
-
-
-
-
-    textarea {
-      resize: none;
-      border-radius: 4px;
-      margin-bottom: 25px;
-      border: 1px solid #DDDDDD;
-    }
-    button {
-      border: none;
-      background-color: #EE4D64;
-      border-radius: 4px;
-      font-size: 16px;
-      color: #fff;
-      font-weight: bold;
-      padding: 13px 0;
-
-    }
-  }
-`;
 
 export const Content = styled.div`
   margin-top: 25px;
-  width: 1200px;
+  width: 900px;
 `;
 
 export const Container = styled.div`
@@ -81,16 +21,6 @@ export const Header = styled.div`
   span {
     font-size: 24px;
     font-weight: bold;
-  }
-
-  input {
-    background: #ffffff;
-    border: 1px solid #dddddd;
-    box-sizing: border-box;
-    border-radius: 4px;
-    font-size: 14px;
-    padding: 10px 20px;
-    width: 300px;
   }
 
   button {
@@ -122,26 +52,50 @@ export const Data = styled.div`
   border-radius: 4px;
   margin-bottom: 30px;
 
+  form {
+    width: 100%;
+    div {
+      display: flex;
+      flex-direction: row;
+
+    }
+
+    div:not(:last-child) {
+      margin-bottom: 8px;
+
+    }
+    label {
+      width: 100%;
+      font-size: 14px;
+      font-weight: bold;
+      display: flex;
+      flex-direction: column;
+      margin 0 10px;
+
+      span {
+        margin-bottom: 8px;
+      }
+    }
+    input {
+      padding: 13px 15px;
+      font-size: 16px;
+      color: #999999;
+      border-radius: 4px;
+      border: 1px solid #dddddd;
+
+    }
+  }
+
   table {
     width: 100%;
     text-align: left;
     border: none;
     border-collapse: collapse;
-
     thead {
       color: #444;
       font-size: 16px;
       line-height: 19px;
       font-weight: bold;
-      th {
-        text-align: center;
-      }
-      th:first-child {
-        text-align: left;
-      }
-      th:last-child {
-        text-align: right;
-      }
     }
     tbody {
       tr {
@@ -150,15 +104,6 @@ export const Data = styled.div`
         text-align: left;
         td {
           padding-top: 20px;
-        }
-        td {
-          text-align: center;
-        }
-        td:first-child {
-          text-align: left;
-        }
-        td:last-child {
-          text-align: right;
         }
       }
       tr:not(:last-child) {

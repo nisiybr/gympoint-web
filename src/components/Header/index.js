@@ -57,7 +57,7 @@ export default function Header() {
       <img src={logo} alt="header" />
       <nav>
         {navs2.map(nav => (
-          <LinkStyle active={nav.active} to={`/${nav.to}`}>
+          <LinkStyle key={nav.id} active={nav.active} to={`/${nav.to}`}>
             {nav.name}
           </LinkStyle>
         ))}

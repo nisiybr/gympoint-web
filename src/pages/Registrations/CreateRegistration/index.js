@@ -47,7 +47,7 @@ export default function CreateRegistration() {
                 <Input
                   type="text"
                   name="student_name"
-                  placeholder="Digite o nome do plano"
+                  placeholder="Buscar Aluno"
                 />
               </label>
             </div>

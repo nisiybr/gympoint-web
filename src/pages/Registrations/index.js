@@ -54,7 +54,7 @@ export default function Registrations() {
                     <td>{registration.Plan.title}</td>
                     <td>{registration.start_date}</td>
                     <td>{registration.end_date}</td>
-                    <td>Sim</td>
+                    <td>{registration.active ? 'Sim' : 'Não'}</td>
                     <td>
                       <button type="button" id="editar">
                         editar

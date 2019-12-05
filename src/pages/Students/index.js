@@ -9,15 +9,28 @@ export default function Students() {
   function handleCreateStudent() {
     history.push('/students/create');
   }
+  function handleEdit(id) {
+    const student = students.filter(item => {
+      return id === item.id;
+    });
+    history.push('/students/edit', { student });
+  }
 
-  useEffect(() => {
-    async function loadStudents() {
+  async function loadStudents(search) {
+    if (!search) {
       const response = await api.get('students');
       setStudents(response.data);
+    } else {
+      const response = await api.get(`students?q=${search}`);
+      setStudents(response.data);
     }
+  }
+  useEffect(() => {
     loadStudents();
   }, []);
-
+  function handleBlurSearch(event) {
+    loadStudents(event.target.value);
+  }
   return (
     <Container>
       <Content>
@@ -27,7 +40,12 @@ export default function Students() {
             <button id="ok" onClick={handleCreateStudent} type="button">
               Cadastrar
             </button>
-            <input type="text" placeholder="Buscar Aluno" />
+            <input
+              onChange={handleBlurSearch}
+              type="text"
+              name="search"
+              placeholder="Buscar Aluno"
+            />
           </div>
         </Header>
         <Data>
@@ -52,7 +70,11 @@ export default function Students() {
                     <td>{student.email}</td>
                     <td>{student.age}</td>
                     <td>
-                      <button type="button" id="editar">
+                      <button
+                        type="button"
+                        id="editar"
+                        onClick={() => handleEdit(student.id)}
+                      >
                         editar
                       </button>
                       <button type="button" id="excluir">

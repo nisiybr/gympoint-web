@@ -5,6 +5,7 @@ import Route from './Route';
 import SignIn from '../pages/SignIn'; // Rotas de Autenticacao
 import Students from '../pages/Students'; // Rotas de Autenticacao
 import CreateStudent from '../pages/Students/CreateStudent'; // Rotas de Autenticacao
+import EditStudent from '../pages/Students/EditStudent'; // Rotas de Autenticacao
 import Plans from '../pages/Plans'; // Rotas de Autenticacao
 import CreatePlan from '../pages/Plans/CreatePlan'; // Rotas de Autenticacao
 import Registrations from '../pages/Registrations'; // Rotas de Autenticacao
@@ -18,6 +19,7 @@ export default function Routes() {
 
       <Route path="/students" exact component={Students} isPrivate />
       <Route path="/students/create" component={CreateStudent} isPrivate />
+      <Route path="/students/edit/" component={EditStudent} isPrivate />
 
       <Route path="/plans" exact component={Plans} isPrivate />
       <Route path="/plans/create" component={CreatePlan} isPrivate />

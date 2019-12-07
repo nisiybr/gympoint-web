@@ -9,6 +9,12 @@ export default function Plans() {
   function handleCreatePlan() {
     history.push('/plans/create');
   }
+  function handleEdit(id) {
+    const plan = plans.filter(item => {
+      return id === item.id;
+    });
+    history.push('/plans/edit', { plan });
+  }
 
   useEffect(() => {
     async function loadPlans() {
@@ -52,7 +58,11 @@ export default function Plans() {
                     <td>{plan.duration}</td>
                     <td>{plan.price}</td>
                     <td>
-                      <button type="button" id="editar">
+                      <button
+                        type="button"
+                        id="editar"
+                        onClick={() => handleEdit(plan.id)}
+                      >
                         editar
                       </button>
                       <button type="button" id="excluir">

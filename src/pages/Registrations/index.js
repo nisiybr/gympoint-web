@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { format, parseISO } from 'date-fns';
 import { Container, Content, Header, Data } from './styles';
 import api from '~/services/api';
 import history from '~/services/history';
@@ -9,11 +10,26 @@ export default function Registrations() {
   function handleCreateRegistration() {
     history.push('/registrations/create');
   }
+  function handleEdit(id) {
+    const registration = registrations.filter(item => {
+      return id === item.id;
+    });
+    const result = registration[0];
+    history.push('/registrations/edit', { result });
+  }
 
   useEffect(() => {
     async function loadRegistrations() {
       const response = await api.get('registration');
-      setRegistrations(response.data);
+
+      const data = response.data.map(item => ({
+        ...item,
+        startDateFormatted: format(parseISO(item.start_date), 'dd/MM/yyyy'),
+        endDateFormatted: format(parseISO(item.end_date), 'dd/MM/yyyy'),
+        student_name: item.Student.student_name,
+        plan: item.Plan.title,
+      }));
+      setRegistrations(data);
     }
     loadRegistrations();
   }, []);
@@ -52,11 +68,15 @@ export default function Registrations() {
                   <tr key={registration.id}>
                     <td>{registration.Student.student_name}</td>
                     <td>{registration.Plan.title}</td>
-                    <td>{registration.start_date}</td>
-                    <td>{registration.end_date}</td>
+                    <td>{registration.startDateFormatted}</td>
+                    <td>{registration.endDateFormatted}</td>
                     <td>{registration.active ? 'Sim' : 'Não'}</td>
                     <td>
-                      <button type="button" id="editar">
+                      <button
+                        type="button"
+                        id="editar"
+                        onClick={() => handleEdit(registration.id)}
+                      >
                         editar
                       </button>
                       <button type="button" id="excluir">

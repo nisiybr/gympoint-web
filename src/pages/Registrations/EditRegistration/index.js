@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input } from '@rocketseat/unform';
 import { format, parseISO } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 import { toast } from 'react-toastify';
 
 import { Container, Header, Data, Content } from './styles';
@@ -10,18 +11,22 @@ import history from '~/services/history';
 export default function EditRegistration() {
   const [registrations, setRegistrations] = useState({});
 
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
   useEffect(() => {
     async function loadData() {
       const { result } = history.location.state;
+      const start_date = utcToZonedTime(parseISO(result.start_date), timezone);
+      const end_date = utcToZonedTime(parseISO(result.end_date), timezone);
       const data = {
         ...result,
-        start_date: format(parseISO(result.start_date), 'yyyy-MM-dd'),
-        end_date: format(parseISO(result.end_date), 'yyyy-MM-dd'),
+        start_date: format(start_date, 'yyyy-MM-dd'),
+        end_date: format(end_date, 'yyyy-MM-dd'),
       };
-
       setRegistrations(data);
     }
     loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function handleBack() {
@@ -30,9 +35,10 @@ export default function EditRegistration() {
   async function handleSubmit({ id, start_date }) {
     try {
       await api.put(`registration/${id}`, {
-        start_date,
+        start_date: parseISO(start_date),
       });
       toast.success('Nova matrícula registrada com sucesso!');
+
       history.push('/registrations');
     } catch (err) {
       toast.error('Não foi registrar a nova matrícula!');
@@ -98,7 +104,7 @@ export default function EditRegistration() {
                 <Input
                   type="number"
                   step="any"
-                  name="total"
+                  name="price"
                   placeholder="Campo calculado"
                 />
               </label>

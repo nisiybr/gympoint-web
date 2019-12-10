@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Form, Input } from '@rocketseat/unform';
 import { toast } from 'react-toastify';
 
@@ -7,7 +7,11 @@ import api from '~/services/api';
 import history from '~/services/history';
 
 export default function EditPlans() {
-  const [plan, setPlan] = useState([]);
+  const [plan, setPlan] = useState({});
+  const [duration, setDuration] = useState(0);
+  const [price, setPrice] = useState(0);
+
+  const totalPrice = useMemo(() => duration * price, [duration, price]);
 
   function handleBack() {
     history.push('/plans');
@@ -27,8 +31,11 @@ export default function EditPlans() {
   }
 
   useEffect(() => {
-    setPlan(history.location.state.plan);
-  }, [plan]);
+    const { data } = history.location.state;
+    setDuration(data.duration);
+    setPrice(data.price);
+    setPlan(data);
+  }, []);
 
   return (
     <Container>
@@ -45,7 +52,7 @@ export default function EditPlans() {
           </div>
         </Header>
         <Data>
-          <Form id="form" initialData={plan[0]} onSubmit={handleSubmit}>
+          <Form id="form" initialData={plan} onSubmit={handleSubmit}>
             <Input type="hidden" name="id" />
             <div>
               <label htmlFor="title">
@@ -64,6 +71,7 @@ export default function EditPlans() {
                   type="number"
                   name="duration"
                   placeholder="Informe a duração"
+                  onChange={event => setDuration(event.target.value)}
                 />
               </label>
               <label htmlFor="price">
@@ -73,6 +81,7 @@ export default function EditPlans() {
                   step="any"
                   name="price"
                   placeholder="Informe o preço/mês"
+                  onChange={event => setPrice(event.target.value)}
                 />
               </label>
               <label htmlFor="total">
@@ -82,6 +91,7 @@ export default function EditPlans() {
                   step="any"
                   name="total"
                   placeholder="Total calculado"
+                  value={totalPrice}
                 />
               </label>
             </div>

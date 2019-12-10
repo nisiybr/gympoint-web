@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { Form, Input } from '@rocketseat/unform';
 import { toast } from 'react-toastify';
 import { Container, Header, Data, Content } from './styles';
@@ -6,10 +6,19 @@ import api from '~/services/api';
 import history from '~/services/history';
 
 export default function CreatePlan() {
+  const [duration, setDuration] = useState(0);
+  const [price, setPrice] = useState(0);
+
+  const totalPrice = useMemo(
+    () => price * duration,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [duration, price]
+  );
+
   function handleBack() {
     history.push('/plans');
-    console.tron.log(history);
   }
+
   async function handleSubmit({ title, duration, price }) {
     try {
       await api.post('plans', {
@@ -57,6 +66,8 @@ export default function CreatePlan() {
                   type="number"
                   name="duration"
                   placeholder="Informe a duração"
+                  value={duration}
+                  onChange={event => setDuration(event.target.value)}
                 />
               </label>
               <label htmlFor="price">
@@ -66,6 +77,8 @@ export default function CreatePlan() {
                   step="any"
                   name="price"
                   placeholder="Informe o preço/mês"
+                  value={price}
+                  onChange={event => setPrice(event.target.value)}
                 />
               </label>
               <label htmlFor="total">
@@ -75,6 +88,7 @@ export default function CreatePlan() {
                   step="any"
                   name="total"
                   placeholder="Total calculado"
+                  value={totalPrice}
                 />
               </label>
             </div>

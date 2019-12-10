@@ -84,6 +84,14 @@ export const Data = styled.div`
       border: 1px solid #dddddd;
 
     }
+    select {
+      padding: 13px 15px;
+      font-size: 16px;
+      color: #999999;
+      border-radius: 4px;
+      border: 1px solid #dddddd;
+
+    }
   }
 
   table {

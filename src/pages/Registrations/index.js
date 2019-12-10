@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { format, parseISO } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
+import { toast } from 'react-toastify';
 import { Container, Content, Header, Data } from './styles';
 import api from '~/services/api';
 import history from '~/services/history';
 
 export default function Registrations() {
   const [registrations, setRegistrations] = useState([]);
+
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   function handleCreateRegistration() {
     history.push('/registrations/create');
@@ -17,6 +21,29 @@ export default function Registrations() {
     const result = registration[0];
     history.push('/registrations/edit', { result });
   }
+  async function handleDelete(id, name, plan, start, end) {
+    // eslint-disable-next-line no-restricted-globals
+    const op = confirm(
+      `Deseja realmente excluir a matricula do aluno ${name}, com plano ${plan}, com data de inicio ${start} e data de fim ${end}?`
+    );
+
+    if (op) {
+      try {
+        await api.delete(`registration/${id}`);
+        toast.success('Matricula excluida com sucesso');
+        const data = registrations.filter(item => {
+          return item.id !== id;
+        });
+        setRegistrations(data);
+        return true;
+      } catch (err) {
+        toast.success(
+          'Falha ao excluir matricula, favor entrar em contato com o Administrador do Sistema'
+        );
+      }
+    }
+    return false;
+  }
 
   useEffect(() => {
     async function loadRegistrations() {
@@ -24,14 +51,21 @@ export default function Registrations() {
 
       const data = response.data.map(item => ({
         ...item,
-        startDateFormatted: format(parseISO(item.start_date), 'dd/MM/yyyy'),
-        endDateFormatted: format(parseISO(item.end_date), 'dd/MM/yyyy'),
+        startDateFormatted: format(
+          utcToZonedTime(parseISO(item.start_date), timezone),
+          'dd/MM/yyyy'
+        ),
+        endDateFormatted: format(
+          utcToZonedTime(parseISO(item.end_date), timezone),
+          'dd/MM/yyyy'
+        ),
         student_name: item.Student.student_name,
         plan: item.Plan.title,
       }));
       setRegistrations(data);
     }
     loadRegistrations();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -79,7 +113,19 @@ export default function Registrations() {
                       >
                         editar
                       </button>
-                      <button type="button" id="excluir">
+                      <button
+                        type="button"
+                        id="excluir"
+                        onClick={() =>
+                          handleDelete(
+                            registration.id,
+                            registration.Student.student_name,
+                            registration.Plan.title,
+                            registration.startDateFormatted,
+                            registration.endDateFormatted
+                          )
+                        }
+                      >
                         apagar
                       </button>
                     </td>

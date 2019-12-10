@@ -13,7 +13,8 @@ export default function Plans() {
     const plan = plans.filter(item => {
       return id === item.id;
     });
-    history.push('/plans/edit', { plan });
+    const data = plan[0];
+    history.push('/plans/edit', { data });
   }
 
   useEffect(() => {

@@ -1,11 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Input } from '@rocketseat/unform';
 import { toast } from 'react-toastify';
+import { parseISO } from 'date-fns';
 import { Container, Header, Data, Content } from './styles';
 import api from '~/services/api';
 import history from '~/services/history';
 
 export default function CreateRegistration() {
+  const [plans, setPlans] = useState([]);
+  const [students, setStudents] = useState([]);
+  const [studentId, setStudentId] = useState('');
+  const [planId, setPlanId] = useState('');
+
+  useEffect(() => {
+    async function loadPlans() {
+      const response = await api.get('plans');
+      setPlans(response.data);
+    }
+    async function loadStudents() {
+      const response = await api.get('students');
+      setStudents(response.data);
+    }
+    loadPlans();
+    loadStudents();
+  }, []);
+
   function handleBack() {
     history.push('/registrations');
     console.tron.log(history);
@@ -15,15 +34,20 @@ export default function CreateRegistration() {
       await api.post('registration', {
         student_id,
         plan_id,
-        start_date,
+        start_date: parseISO(start_date),
       });
       toast.success('Nova matrícula registrada com sucesso!');
       history.push('/registrations');
     } catch (err) {
-      toast.error('Não foi registrar a nova matrícula!');
+      toast.error('Não foi possivel registrar a nova matrícula!');
     }
   }
-
+  function handleChangeStudent(id) {
+    setStudentId(id);
+  }
+  function handleChangePlan(id) {
+    setPlanId(id);
+  }
   return (
     <Container>
       <Content>
@@ -41,25 +65,39 @@ export default function CreateRegistration() {
         <Data>
           <Form id="form" onSubmit={handleSubmit}>
             <div>
-              <Input type="hidden" name="student_id" />
-              <label htmlFor="student_name">
+              <label htmlFor="student">
+                <Input type="hidden" name="student_id" value={studentId} />
                 <span>ALUNO</span>
-                <Input
-                  type="text"
-                  name="student_name"
-                  placeholder="Buscar Aluno"
-                />
+                <select
+                  name="student"
+                  onChange={event => handleChangeStudent(event.target.value)}
+                >
+                  <option value="">-- Selecione um aluno --</option>
+                  {students.map(item => (
+                    <option
+                      key={item.id}
+                      value={item.id}
+                    >{`${item.name} - ${item.age} `}</option>
+                  ))}
+                </select>
               </label>
             </div>
             <div>
-              <Input type="hidden" name="plan_id" />
               <label htmlFor="plan">
+                <Input type="hidden" name="plan_id" value={planId} />
                 <span>PLANO</span>
-                <Input
-                  type="text"
+                <select
                   name="plan"
-                  placeholder="Selecione o plano"
-                />
+                  onChange={event => handleChangePlan(event.target.value)}
+                >
+                  <option value="">-- Selecione um plano --</option>
+                  {plans.map(item => (
+                    <option
+                      key={item.id}
+                      value={item.id}
+                    >{`${item.title} - ${item.duration} meses - R$ ${item.price}`}</option>
+                  ))}
+                </select>
               </label>
             </div>
             <div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import { Container, Content, Header, Data } from './styles';
 import api from '~/services/api';
 import history from '~/services/history';
@@ -14,6 +15,28 @@ export default function Students() {
       return id === item.id;
     });
     history.push('/students/edit', { student });
+  }
+
+  async function handleDelete(id, name, age) {
+    // eslint-disable-next-line no-restricted-globals
+    const op = confirm(
+      `Deseja realmente excluir o aluno ${name}, com ${age} anos.`
+    );
+
+    if (op) {
+      try {
+        await api.delete(`students/${id}`);
+        toast.success('Aluno excluido com sucesso');
+        const data = students.filter(item => {
+          return item.id !== id;
+        });
+        setStudents(data);
+      } catch (err) {
+        toast.error(
+          'Falha ao excluir aluno, favor entrar em contato com o Administrador do Sistema'
+        );
+      }
+    }
   }
 
   async function loadStudents(search) {
@@ -77,7 +100,13 @@ export default function Students() {
                       >
                         editar
                       </button>
-                      <button type="button" id="excluir">
+                      <button
+                        type="button"
+                        id="excluir"
+                        onClick={() =>
+                          handleDelete(student.id, student.name, student.age)
+                        }
+                      >
                         apagar
                       </button>
                     </td>

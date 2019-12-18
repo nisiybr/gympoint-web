@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input } from '@rocketseat/unform';
 import { toast } from 'react-toastify';
 import { parseISO } from 'date-fns';
+import AsyncSelect from 'react-select/async';
 import { Container, Header, Data, Content } from './styles';
 import api from '~/services/api';
 import history from '~/services/history';
@@ -12,22 +13,47 @@ export default function CreateRegistration() {
   const [studentId, setStudentId] = useState('');
   const [planId, setPlanId] = useState('');
 
-  useEffect(() => {
-    async function loadPlans() {
-      const response = await api.get('plans');
-      setPlans(response.data);
-    }
-    async function loadStudents() {
-      const response = await api.get('students');
-      setStudents(response.data);
-    }
-    loadPlans();
-    loadStudents();
-  }, []);
+  async function loadStudents() {
+    const response = await api.get('students');
+    const { data } = response;
+    const result = data.map(item => {
+      return {
+        value: item.id,
+        label: item.name,
+      };
+    });
+    setStudents(result);
+  }
+
+  async function loadPlans() {
+    const response = await api.get('plans');
+    setPlans(response.data);
+  }
+
+  async function filterColors(inputValue) {
+    const response = await api.get('students');
+    return response.data.filter(i =>
+      i.label.toLowerCase().includes(inputValue.toLowerCase())
+    );
+  }
+
+  const promiseOptions = inputValue =>
+    new Promise(resolve => {
+      setTimeout(() => {
+        resolve(filterColors(inputValue));
+      }, 1000);
+    });
 
   function handleBack() {
     history.push('/registrations');
     console.tron.log(history);
+  }
+
+  function handleChangeStudent(id) {
+    setStudentId(id);
+  }
+  function handleChangePlan(id) {
+    setPlanId(id);
   }
   async function handleSubmit({ student_id, plan_id, start_date }) {
     try {
@@ -42,12 +68,13 @@ export default function CreateRegistration() {
       toast.error('Não foi possivel registrar a nova matrícula!');
     }
   }
-  function handleChangeStudent(id) {
-    setStudentId(id);
-  }
-  function handleChangePlan(id) {
-    setPlanId(id);
-  }
+
+  useEffect(() => {
+    loadStudents();
+    loadPlans();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Container>
       <Content>
@@ -68,18 +95,24 @@ export default function CreateRegistration() {
               <label htmlFor="student">
                 <Input type="hidden" name="student_id" value={studentId} />
                 <span>ALUNO</span>
-                <select
+                <AsyncSelect
+                  cacheOptions
+                  defaultOptions
+                  loadOptions={promiseOptions}
+                  loadedOptions
+                />
+                {/* <select
                   name="student"
                   onChange={event => handleChangeStudent(event.target.value)}
                 >
                   <option value="">-- Selecione um aluno --</option>
                   {students.map(item => (
                     <option
-                      key={item.id}
-                      value={item.id}
-                    >{`${item.name} - ${item.age} `}</option>
+                      key={item.value}
+                      value={item.value}
+                    >{`${item.label}`}</option>
                   ))}
-                </select>
+                </select> */}
               </label>
             </div>
             <div>

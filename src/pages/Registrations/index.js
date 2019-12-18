@@ -35,14 +35,12 @@ export default function Registrations() {
           return item.id !== id;
         });
         setRegistrations(data);
-        return true;
       } catch (err) {
-        toast.success(
+        toast.error(
           'Falha ao excluir matricula, favor entrar em contato com o Administrador do Sistema'
         );
       }
     }
-    return false;
   }
 
   useEffect(() => {

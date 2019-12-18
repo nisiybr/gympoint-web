@@ -1,13 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import { Form } from '@rocketseat/unform';
+import { Form, Input } from '@rocketseat/unform';
+import { toast } from 'react-toastify';
+import { format, parseISO } from 'date-fns';
 import { Container, Content, Header, Data, StyledModal } from './styles';
 import api from '~/services/api';
 
 export default function HelpOrders() {
   const [helpOrders, setHelpOrders] = useState([]);
+  const [helpOrderModal, setHelpOrderModal] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
 
-  function toggleModal() {
+  async function handleSubmit({ id, answer }) {
+    try {
+      await api.put(`help-orders/${id}/answer`, {
+        answer,
+      });
+      toast.success('Pedido de Ajuda respondido com sucesso!');
+
+      const data = helpOrders.filter(item => {
+        return parseInt(item.id) !== parseInt(id);
+      });
+
+      setHelpOrders(data);
+
+      setIsOpen(!isOpen);
+    } catch (err) {
+      toast.error('Não foi possível responder ao pedido de ajuda!');
+    }
+  }
+
+  function toggleModal(id) {
+    const data = helpOrders.filter(item => {
+      return item.id === id;
+    });
+    setHelpOrderModal(data);
+
     setIsOpen(!isOpen);
   }
 
@@ -44,9 +71,15 @@ export default function HelpOrders() {
                   helpOrders.map(helpOrder => (
                     <tr key={helpOrder.id}>
                       <td>{helpOrder.Student.name}</td>
-                      <td>{helpOrder.createdAt}</td>
                       <td>
-                        <button type="button" id="editar" onClick={toggleModal}>
+                        {format(parseISO(helpOrder.createdAt), 'dd/MM/yyyy')}
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          id="editar"
+                          onClick={() => toggleModal(helpOrder.id)}
+                        >
                           responder
                         </button>
                       </td>
@@ -63,24 +96,24 @@ export default function HelpOrders() {
         onBackgroundClick={toggleModal}
         onEscapeKeydown={toggleModal}
       >
-        <strong>PERGUNTA DO ALUNO</strong>
-        <p>
-          Olá pessoal da academia, gostaria de saber se quando acordar devo
-          ingerir batata doce e frango logo de primeira, preparar as marmitas e
-          lotar a geladeira? Dou um pico de insulina e jogo o hipercalórico?
-        </p>
-        <strong>SUA RESPOSTA</strong>
-        <Form>
-          <textarea
-            type="textarea"
-            name="answer"
-            rows={5}
-            placeholder="Escreva sua resposta"
-          />
-          <button type="submit" onClick={toggleModal}>
-            Responder aluno
-          </button>
-        </Form>
+        {helpOrderModal.map(item => (
+          <>
+            <strong>PERGUNTA DO ALUNO</strong>
+            <p>{item.question}</p>
+            <strong>SUA RESPOSTA</strong>
+            <Form key={item.id} onSubmit={handleSubmit}>
+              <Input type="hidden" name="id" value={item.id} />
+              <Input
+                multiline
+                type="text"
+                name="answer"
+                placeholder="Escreva sua resposta"
+                rows={5}
+              />
+              <button type="submit">Responder aluno</button>
+            </Form>
+          </>
+        ))}
       </StyledModal>
     </>
   );

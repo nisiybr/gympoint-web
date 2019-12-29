@@ -2,19 +2,30 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input } from '@rocketseat/unform';
 import { toast } from 'react-toastify';
 import { format, parseISO } from 'date-fns';
-import { Container, Content, Header, Data, StyledModal } from './styles';
+import { FaSpinner } from 'react-icons/fa';
+import {
+  Container,
+  Content,
+  Header,
+  Data,
+  StyledModal,
+  ModalButton,
+} from './styles';
 import api from '~/services/api';
 
 export default function HelpOrders() {
   const [helpOrders, setHelpOrders] = useState([]);
   const [helpOrderModal, setHelpOrderModal] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   async function handleSubmit({ id, answer }) {
     try {
+      setLoading(true);
       await api.put(`help-orders/${id}/answer`, {
         answer,
       });
+      setLoading(false);
       toast.success('Pedido de Ajuda respondido com sucesso!');
 
       const data = helpOrders.filter(item => {
@@ -26,6 +37,7 @@ export default function HelpOrders() {
       setIsOpen(!isOpen);
     } catch (err) {
       toast.error('Não foi possível responder ao pedido de ajuda!');
+      setLoading(false);
     }
   }
 
@@ -65,7 +77,9 @@ export default function HelpOrders() {
               <tbody>
                 {helpOrders.length === 0 ? (
                   <tr>
-                    <td colSpan={6}>Não existem planos cadastrados</td>
+                    <td colSpan={6}>
+                      Não existem pedidos de auxilio a serem respondidos
+                    </td>
                   </tr>
                 ) : (
                   helpOrders.map(helpOrder => (
@@ -110,7 +124,13 @@ export default function HelpOrders() {
                 placeholder="Escreva sua resposta"
                 rows={5}
               />
-              <button type="submit">Responder aluno</button>
+              <ModalButton loading={loading ? 1 : 0}>
+                {loading ? (
+                  <FaSpinner color="#FFF" size={14} />
+                ) : (
+                  'Responder aluno'
+                )}
+              </ModalButton>
             </Form>
           </>
         ))}

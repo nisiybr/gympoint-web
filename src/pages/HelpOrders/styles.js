@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import Modal from 'styled-react-modal';
 
 export const StyledModal = Modal.styled`
@@ -47,17 +47,41 @@ export const StyledModal = Modal.styled`
       margin-bottom: 25px;
       border: 1px solid #DDDDDD;
     }
-    button {
-      border: none;
-      background-color: #EE4D64;
-      border-radius: 4px;
-      font-size: 16px;
-      color: #fff;
-      font-weight: bold;
-      padding: 13px 0;
 
-    }
   }
+`;
+
+const rotate = keyframes`
+ from {
+  transform: rotate(0deg);
+ }
+ to {
+   transform: rotate(360deg);
+ }
+`;
+
+export const ModalButton = styled.button.attrs(props => ({
+  type: 'submit',
+  disabled: props.loading, // pega a props por componetizacao
+}))`
+  border: none;
+  background-color: #ee4d64;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #fff;
+  font-weight: bold;
+  padding: 13px 0;
+  &[disabled] {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  ${props =>
+    props.loading &&
+    css`
+      svg {
+        animation: ${rotate} 2s linear infinite;
+      }
+    `}
 `;
 
 export const Content = styled.div`

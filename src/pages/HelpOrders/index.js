@@ -69,6 +69,7 @@ export default function HelpOrders() {
             <table>
               <thead>
                 <tr>
+                  <th>ID DE CADASTRO</th>
                   <th>ALUNO</th>
                   <th>DATA DE CRIAÇÃO</th>
                   <th>OPÇÕES</th>
@@ -84,9 +85,13 @@ export default function HelpOrders() {
                 ) : (
                   helpOrders.map(helpOrder => (
                     <tr key={helpOrder.id}>
+                      <td>{helpOrder.student_id}</td>
                       <td>{helpOrder.Student.name}</td>
                       <td>
-                        {format(parseISO(helpOrder.createdAt), 'dd/MM/yyyy')}
+                        {format(
+                          parseISO(helpOrder.createdAt),
+                          'dd/MM/yyyy HH:mm:ss'
+                        )}
                       </td>
                       <td>
                         <button

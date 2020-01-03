@@ -75,6 +75,7 @@ export default function Students() {
           <table>
             <thead>
               <tr>
+                <th>ID DE CADASTRO</th>
                 <th>NOME</th>
                 <th>E-MAIL</th>
                 <th>IDADE</th>
@@ -89,6 +90,7 @@ export default function Students() {
               ) : (
                 students.map(student => (
                   <tr key={student.id}>
+                    <td>{student.id}</td>
                     <td>{student.name}</td>
                     <td>{student.email}</td>
                     <td>{student.age}</td>

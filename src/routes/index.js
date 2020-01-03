@@ -16,8 +16,8 @@ import Registrations from '../pages/Registrations'; // Rotas de Autenticacao
 import CreateRegistration from '../pages/Registrations/CreateRegistration'; // Rotas de Autenticacao
 import EditRegistration from '../pages/Registrations/EditRegistration'; // Rotas de Autenticacao
 
-import HelpOrders from '../pages/HelpOrders'; // Rotas de Autenticacao
-
+import HelpOrders from '../pages/HelpOrders';
+// Rotas de Autenticacao
 export default function Routes() {
   return (
     <Switch>

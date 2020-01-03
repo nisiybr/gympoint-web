@@ -17,12 +17,10 @@ export const Header = styled.div`
   align-items: center;
   justify-content: space-between;
   height: 50px;
-
   span {
     font-size: 24px;
     font-weight: bold;
   }
-
   button {
     border: none;
     color: #fff;
@@ -31,7 +29,6 @@ export const Header = styled.div`
     border-radius: 4px;
     padding: 10px 30px;
     margin-right: 16px;
-
     &#ok {
       background: #ee4d64;
     }
@@ -51,18 +48,14 @@ export const Data = styled.div`
   align-items: center;
   border-radius: 4px;
   margin-bottom: 30px;
-
   form {
     width: 100%;
     div {
       display: flex;
       flex-direction: row;
-
     }
-
     div:not(:last-child) {
       margin-bottom: 8px;
-
     }
     label {
       width: 100%;
@@ -71,7 +64,6 @@ export const Data = styled.div`
       display: flex;
       flex-direction: column;
       margin 0 10px;
-
       span {
         margin-bottom: 8px;
       }
@@ -82,10 +74,8 @@ export const Data = styled.div`
       color: #999999;
       border-radius: 4px;
       border: 1px solid #dddddd;
-
     }
   }
-
   table {
     width: 100%;
     text-align: left;
@@ -118,11 +108,9 @@ export const Data = styled.div`
       border: none;
       font-size: 15px;
       line-height: 18px;
-
       & + button {
         margin-left: 20px;
       }
-
       &#editar {
         color: #4d85ee;
       }

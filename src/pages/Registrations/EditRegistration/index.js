@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Form, Input } from '@rocketseat/unform';
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, addDays, addMonths } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { toast } from 'react-toastify';
 
@@ -10,6 +10,8 @@ import history from '~/services/history';
 
 export default function EditRegistration() {
   const [registrations, setRegistrations] = useState({});
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
 
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
@@ -17,21 +19,49 @@ export default function EditRegistration() {
     async function loadData() {
       const { result } = history.location.state;
       const start_date = utcToZonedTime(parseISO(result.start_date), timezone);
+      const start_date_formatted = format(start_date, 'yyyy-MM-dd');
       const end_date = utcToZonedTime(parseISO(result.end_date), timezone);
+      const end_date_formatted = format(end_date, 'yyyy-MM-dd');
       const data = {
         ...result,
-        start_date: format(start_date, 'yyyy-MM-dd'),
-        end_date: format(end_date, 'yyyy-MM-dd'),
+        start_date: start_date_formatted,
+        end_date: end_date_formatted,
+        plan: `${result.Plan.title} - ${result.Plan.duration} meses - R$ ${result.Plan.month_price}`,
       };
       setRegistrations(data);
+      setStartDate(start_date_formatted);
+      setEndDate(end_date_formatted);
     }
     loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useMemo(
+    () => {
+      if (registrations) {
+        if (startDate) {
+          const start_date_conv = parseISO(startDate); // converte e trunca data de inicio
+          const end_date = format(
+            addDays(
+              addMonths(start_date_conv, registrations.Plan.duration),
+              -1
+            ),
+            'yyyy-MM-dd'
+          ); // calcula a data de fim de acordo com o plano
+          setEndDate(end_date);
+        }
+      }
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [startDate]
+  );
+
   function handleBack() {
     history.push('/registrations');
   }
+  function handleChangeStartDate(date) {
+    setStartDate(date);
+  }
+
   async function handleSubmit({ id, start_date }) {
     try {
       await api.put(`registration/${id}`, {
@@ -69,6 +99,7 @@ export default function EditRegistration() {
                   type="text"
                   name="student_name"
                   placeholder="Buscar Aluno"
+                  readOnly
                 />
               </label>
             </div>
@@ -79,6 +110,7 @@ export default function EditRegistration() {
                   type="text"
                   name="plan"
                   placeholder="Selecione o plano"
+                  readOnly
                 />
               </label>
             </div>
@@ -89,6 +121,7 @@ export default function EditRegistration() {
                   type="date"
                   name="start_date"
                   placeholder="Escolha a data"
+                  onChange={event => handleChangeStartDate(event.target.value)}
                 />
               </label>
               <label htmlFor="end_date">
@@ -96,7 +129,9 @@ export default function EditRegistration() {
                 <Input
                   type="date"
                   name="end_date"
+                  value={endDate}
                   placeholder="Campo calculado"
+                  readOnly
                 />
               </label>
               <label htmlFor="total">
@@ -106,6 +141,7 @@ export default function EditRegistration() {
                   step="any"
                   name="price"
                   placeholder="Campo calculado"
+                  readOnly
                 />
               </label>
             </div>

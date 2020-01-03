@@ -1,8 +1,22 @@
 import styled from 'styled-components';
+import AsyncSelect from 'react-select/async';
+
+export const ASelect = styled(AsyncSelect).attrs({
+  placeholder: 'Digite para buscar...',
+})`
+  width: 100%;
+  height: 45px;
+  div {
+    color: #999999;
+    font-size: 16px;
+    font-weight: normal;
+  }
+`;
 
 export const Content = styled.div`
   margin-top: 25px;
   width: 900px;
+  padding: 50px;
 `;
 
 export const Container = styled.div`
@@ -54,15 +68,13 @@ export const Data = styled.div`
 
   form {
     width: 100%;
-    div {
+    div.field {
       display: flex;
       flex-direction: row;
-
     }
 
     div:not(:last-child) {
       margin-bottom: 8px;
-
     }
     label {
       width: 100%;
@@ -70,7 +82,7 @@ export const Data = styled.div`
       font-weight: bold;
       display: flex;
       flex-direction: column;
-      margin 0 10px;
+      margin: 0 10px;
 
       span {
         margin-bottom: 8px;
@@ -82,7 +94,6 @@ export const Data = styled.div`
       color: #999999;
       border-radius: 4px;
       border: 1px solid #dddddd;
-
     }
     select {
       padding: 13px 15px;
@@ -90,7 +101,6 @@ export const Data = styled.div`
       color: #999999;
       border-radius: 4px;
       border: 1px solid #dddddd;
-
     }
   }
 

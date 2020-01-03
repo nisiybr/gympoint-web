@@ -75,13 +75,14 @@ export default function Registrations() {
             <button id="ok" onClick={handleCreateRegistration} type="button">
               Cadastrar
             </button>
-            <input type="text" placeholder="Buscar Plano" />
+            <input type="text" placeholder="Buscar Matriculas" />
           </div>
         </Header>
         <Data>
           <table>
             <thead>
               <tr>
+                <th>ID DA MATRICULA</th>
                 <th>ALUNO</th>
                 <th>PLANO</th>
                 <th>INÍCIO</th>
@@ -98,6 +99,7 @@ export default function Registrations() {
               ) : (
                 registrations.map(registration => (
                   <tr key={registration.id}>
+                    <td>{registration.id}</td>
                     <td>{registration.Student.student_name}</td>
                     <td>{registration.Plan.title}</td>
                     <td>{registration.startDateFormatted}</td>

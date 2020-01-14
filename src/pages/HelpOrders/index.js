@@ -3,6 +3,7 @@ import { Form, Input } from '@rocketseat/unform';
 import { toast } from 'react-toastify';
 import { format, parseISO } from 'date-fns';
 import { FaSpinner } from 'react-icons/fa';
+import * as Yup from 'yup';
 import {
   Container,
   Content,
@@ -12,6 +13,11 @@ import {
   ModalButton,
 } from './styles';
 import api from '~/services/api';
+
+const schema = Yup.object().shape({
+  id: Yup.number().required(),
+  answer: Yup.string().required('É necessário informar uma resposta'),
+});
 
 export default function HelpOrders() {
   const [helpOrders, setHelpOrders] = useState([]);
@@ -120,7 +126,7 @@ export default function HelpOrders() {
             <strong>PERGUNTA DO ALUNO</strong>
             <p>{item.question}</p>
             <strong>SUA RESPOSTA</strong>
-            <Form key={item.id} onSubmit={handleSubmit}>
+            <Form schema={schema} key={item.id} onSubmit={handleSubmit}>
               <Input type="hidden" name="id" value={item.id} />
               <Input
                 multiline

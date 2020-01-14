@@ -32,6 +32,12 @@ export const Content = styled.div`
     flex-direction: column;
     width: 100%;
 
+    span {
+      color: #fb6f91;
+      align-self: flex-start;
+      margin: 0 0 10px;
+    }
+
     strong {
       color: #444;
       font-size: 14px;

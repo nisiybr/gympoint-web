@@ -1,10 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input } from '@rocketseat/unform';
 import { toast } from 'react-toastify';
+import * as Yup from 'yup';
 
 import { Container, Header, Data, Content } from './styles';
 import api from '~/services/api';
 import history from '~/services/history';
+
+const schema = Yup.object().shape({
+  name: Yup.string().required('Informar um nome e obrigatorio'),
+  email: Yup.string()
+    .email('Insira um e-mail valido')
+    .required('O e-mail e obrigatorio'),
+  age: Yup.number()
+    .typeError('Idade deve ser um número')
+    .integer('Idade deve ser um número inteiro')
+    .required('Idade é obrigatória'),
+  weight: Yup.number()
+    .typeError('Peso deve ser um número')
+    .required('Peso é obrigatório'),
+  height: Yup.number()
+    .typeError('Altura deve ser um número')
+    .required('Altura é obrigatório'),
+});
 
 export default function EditStudents() {
   const [student, setStudent] = useState([]);
@@ -48,30 +66,36 @@ export default function EditStudents() {
         </Header>
 
         <Data>
-          <Form initialData={student[0]} id="form" onSubmit={handleSubmit}>
+          <Form
+            schema={schema}
+            initialData={student[0]}
+            id="form"
+            onSubmit={handleSubmit}
+          >
             <div>
               <label htmlFor="name">
-                <span>NOME COMPLETO</span>
+                <strong>NOME COMPLETO</strong>
                 <Input type="text" name="name" placeholder="Digite o nome" />
               </label>
             </div>
             <div>
               <label htmlFor="email">
-                <span>ENDERECO DE-MAIL</span>
+                <strong>ENDERECO DE-MAIL</strong>
                 <Input
                   type="email"
                   name="email"
+                  readOnly
                   placeholder="exemplo@email.com.br"
                 />
               </label>
             </div>
             <div>
               <label htmlFor="age">
-                <span>IDADE</span>
+                <strong>IDADE</strong>
                 <Input type="number" name="age" placeholder="Informe a idade" />
               </label>
               <label htmlFor="weight">
-                <span>PESO (em kg)</span>
+                <strong>PESO (em kg)</strong>
                 <Input
                   type="number"
                   step="any"
@@ -80,7 +104,7 @@ export default function EditStudents() {
                 />
               </label>
               <label htmlFor="height">
-                <span>ALTURA</span>
+                <strong>ALTURA</strong>
                 <Input
                   type="number"
                   step="any"

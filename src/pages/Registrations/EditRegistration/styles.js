@@ -63,8 +63,8 @@ export const Data = styled.div`
       font-weight: bold;
       display: flex;
       flex-direction: column;
-      margin 0 10px;
-      span {
+      margin: 10px 10px;
+      strong {
         margin-bottom: 8px;
       }
     }

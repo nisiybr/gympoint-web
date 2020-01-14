@@ -1,13 +1,25 @@
 import React, { useState, useMemo } from 'react';
 import { Form, Input } from '@rocketseat/unform';
 import { toast } from 'react-toastify';
+import * as Yup from 'yup';
 import { Container, Header, Data, Content } from './styles';
 import api from '~/services/api';
 import history from '~/services/history';
 
+const schema = Yup.object().shape({
+  title: Yup.string().required('Informar um nome do plano e obrigatorio'),
+  duration: Yup.number()
+    .typeError('Duração deve ser um número')
+    .integer('Duração deve ser um número inteiro')
+    .required('Duração é obrigatória'),
+  price: Yup.number()
+    .typeError('Preço Mensal deve ser um número')
+    .required('Peso é obrigatório'),
+});
+
 export default function CreatePlan() {
-  const [duration, setDuration] = useState(0);
-  const [price, setPrice] = useState(0);
+  const [duration, setDuration] = useState();
+  const [price, setPrice] = useState();
 
   const totalPrice = useMemo(
     () => price * duration,
@@ -48,10 +60,10 @@ export default function CreatePlan() {
           </div>
         </Header>
         <Data>
-          <Form id="form" onSubmit={handleSubmit}>
+          <Form schema={schema} id="form" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="title">
-                <span>TÍTULO DO PLANO</span>
+                <strong>TÍTULO DO PLANO</strong>
                 <Input
                   type="text"
                   name="title"
@@ -61,7 +73,7 @@ export default function CreatePlan() {
             </div>
             <div>
               <label htmlFor="duration">
-                <span>DURAÇÃO (em meses)</span>
+                <strong>DURAÇÃO (em meses)</strong>
                 <Input
                   type="number"
                   name="duration"
@@ -71,7 +83,7 @@ export default function CreatePlan() {
                 />
               </label>
               <label htmlFor="price">
-                <span>PREÇO MENSAL</span>
+                <strong>PREÇO MENSAL</strong>
                 <Input
                   type="number"
                   step="any"
@@ -82,12 +94,13 @@ export default function CreatePlan() {
                 />
               </label>
               <label htmlFor="total">
-                <span>PREÇO TOTAL</span>
+                <strong>PREÇO TOTAL</strong>
                 <Input
                   type="number"
                   step="any"
                   name="total"
                   placeholder="Total calculado"
+                  readOnly
                   value={totalPrice}
                 />
               </label>

@@ -75,7 +75,6 @@ export default function Registrations() {
             <button id="ok" onClick={handleCreateRegistration} type="button">
               Cadastrar
             </button>
-            <input type="text" placeholder="Buscar Matriculas" />
           </div>
         </Header>
         <Data>

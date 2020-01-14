@@ -55,7 +55,6 @@ export default function Plans() {
             <button id="ok" onClick={handleCreatePlan} type="button">
               Cadastrar
             </button>
-            <input type="text" placeholder="Buscar Plano" />
           </div>
         </Header>
         <Data>

@@ -57,12 +57,10 @@ export const Data = styled.div`
     div {
       display: flex;
       flex-direction: row;
-
     }
 
     div:not(:last-child) {
       margin-bottom: 8px;
-
     }
     label {
       width: 100%;
@@ -70,9 +68,9 @@ export const Data = styled.div`
       font-weight: bold;
       display: flex;
       flex-direction: column;
-      margin 0 10px;
+      margin: 10px 10px;
 
-      span {
+      strong {
         margin-bottom: 8px;
       }
     }
@@ -82,7 +80,6 @@ export const Data = styled.div`
       color: #999999;
       border-radius: 4px;
       border: 1px solid #dddddd;
-
     }
   }
 

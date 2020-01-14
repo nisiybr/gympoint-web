@@ -3,10 +3,18 @@ import { Form, Input } from '@rocketseat/unform';
 import { format, parseISO, addDays, addMonths } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { toast } from 'react-toastify';
+import * as Yup from 'yup';
 
 import { Container, Header, Data, Content } from './styles';
 import api from '~/services/api';
 import history from '~/services/history';
+
+const schema = Yup.object().shape({
+  id: Yup.string().required('É necessário selecionar um aluno'),
+  start_date: Yup.string().required(
+    'É necessário selecionar uma data de inicio'
+  ),
+});
 
 export default function EditRegistration() {
   const [registrations, setRegistrations] = useState({});
@@ -90,11 +98,16 @@ export default function EditRegistration() {
           </div>
         </Header>
         <Data>
-          <Form id="form" initialData={registrations} onSubmit={handleSubmit}>
+          <Form
+            schema={schema}
+            id="form"
+            initialData={registrations}
+            onSubmit={handleSubmit}
+          >
             <Input type="hidden" name="id" />
             <div>
               <label htmlFor="student_name">
-                <span>ALUNO</span>
+                <strong>ALUNO</strong>
                 <Input
                   type="text"
                   name="student_name"
@@ -105,7 +118,7 @@ export default function EditRegistration() {
             </div>
             <div>
               <label htmlFor="plan">
-                <span>PLANO</span>
+                <strong>PLANO</strong>
                 <Input
                   type="text"
                   name="plan"
@@ -116,7 +129,7 @@ export default function EditRegistration() {
             </div>
             <div>
               <label htmlFor="start_date">
-                <span>DATA DE INICIO</span>
+                <strong>DATA DE INICIO</strong>
                 <Input
                   type="date"
                   name="start_date"
@@ -125,7 +138,7 @@ export default function EditRegistration() {
                 />
               </label>
               <label htmlFor="end_date">
-                <span>DATA DE TÉRMINO</span>
+                <strong>DATA DE TÉRMINO</strong>
                 <Input
                   type="date"
                   name="end_date"
@@ -135,7 +148,7 @@ export default function EditRegistration() {
                 />
               </label>
               <label htmlFor="total">
-                <span>VALOR FINAL</span>
+                <strong>VALOR FINAL</strong>
                 <Input
                   type="number"
                   step="any"

@@ -1,5 +1,39 @@
-import styled from 'styled-components';
 import AsyncSelect from 'react-select/async';
+import styled, { keyframes, css } from 'styled-components';
+
+const rotate = keyframes`
+ from {
+  transform: rotate(0deg);
+ }
+ to {
+   transform: rotate(360deg);
+ }
+`;
+
+export const Button = styled.button.attrs(props => ({
+  type: 'submit',
+  disabled: props.loading, // pega a props por componetizacao
+  form: 'form',
+}))`
+  border: none;
+  background-color: #ee4d64;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #fff;
+  font-weight: bold;
+  padding: 13px 0;
+  &[disabled] {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  ${props =>
+    props.loading &&
+    css`
+      svg {
+        animation: ${rotate} 2s linear infinite;
+      }
+    `}
+`;
 
 export const ASelect = styled(AsyncSelect).attrs({
   placeholder: 'Digite para buscar...',
@@ -82,9 +116,9 @@ export const Data = styled.div`
       font-weight: bold;
       display: flex;
       flex-direction: column;
-      margin: 0 10px;
+      margin: 10px 10px;
 
-      span {
+      strong {
         margin-bottom: 8px;
       }
     }

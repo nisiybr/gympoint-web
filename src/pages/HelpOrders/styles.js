@@ -2,9 +2,6 @@ import styled, { keyframes, css } from 'styled-components';
 import Modal from 'styled-react-modal';
 
 export const StyledModal = Modal.styled`
-
-
-
   width: 450px;
   height: 400px;
   display: flex;
@@ -44,9 +41,15 @@ export const StyledModal = Modal.styled`
     textarea {
       resize: none;
       border-radius: 4px;
-      margin-bottom: 25px;
+      margin-bottom: 10px;
       border: 1px solid #DDDDDD;
     }
+
+    span {
+      color: #fb6f91;
+      align-self: flex-start;
+      margin-bottom: 25px;
+      }
 
   }
 `;

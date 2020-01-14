@@ -2,9 +2,19 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Form, Input } from '@rocketseat/unform';
 import { toast } from 'react-toastify';
 import { parseISO, addDays, addMonths, format } from 'date-fns';
-import { Container, Header, Data, Content, ASelect } from './styles';
+import * as Yup from 'yup';
+import { FaSpinner } from 'react-icons/fa';
+import { Container, Header, Data, Content, ASelect, Button } from './styles';
 import api from '~/services/api';
 import history from '~/services/history';
+
+const schema = Yup.object().shape({
+  student_id: Yup.string().required('É necessário selecionar um aluno'),
+  plan_id: Yup.string().required('É necessário selecionar um plano'),
+  start_date: Yup.string().required(
+    'É necessário selecionar uma data de inicio'
+  ),
+});
 
 export default function CreateRegistration() {
   const [plans, setPlans] = useState([]);
@@ -15,6 +25,7 @@ export default function CreateRegistration() {
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [price, setPrice] = useState();
+  const [loading, setLoading] = useState(false);
 
   async function loadStudents() {
     const response = await api.get('students');
@@ -92,15 +103,18 @@ export default function CreateRegistration() {
   }
   async function handleSubmit({ student_id, plan_id, start_date }) {
     try {
+      setLoading(true);
       await api.post('registration', {
         student_id,
         plan_id,
         start_date: parseISO(start_date),
       });
       toast.success('Nova matrícula registrada com sucesso!');
+      setLoading(false);
       history.push('/registrations');
     } catch (err) {
       toast.error('Não foi possivel registrar a nova matrícula!');
+      setLoading(false);
     }
   }
 
@@ -113,17 +127,16 @@ export default function CreateRegistration() {
             <button id="back" onClick={handleBack} type="button">
               VOLTAR
             </button>
-            <button id="ok" type="submit" form="form">
-              SALVAR
-            </button>
+            <Button loading={loading ? 1 : 0}>
+              {loading ? <FaSpinner color="#FFF" size={14} /> : 'SALVAR'}
+            </Button>
           </div>
         </Header>
         <Data>
-          <Form id="form" onSubmit={handleSubmit}>
+          <Form schema={schema} id="form" onSubmit={handleSubmit}>
             <div className="field">
               <label htmlFor="student">
-                <Input type="hidden" name="student_id" value={studentId} />
-                <span>ALUNO</span>
+                <strong>ALUNO</strong>
                 <ASelect
                   cacheOptions
                   loadOptions={loadOptions}
@@ -131,12 +144,12 @@ export default function CreateRegistration() {
                   onInputChange={handleInputChange}
                   onChange={handleChangeStudent}
                 />
+                <Input type="hidden" name="student_id" value={studentId} />
               </label>
             </div>
             <div className="field">
               <label htmlFor="plan">
-                <Input type="hidden" name="plan_id" value={planId} />
-                <span>PLANO</span>
+                <strong>PLANO</strong>
                 <select
                   name="plan"
                   onChange={event => handleChangePlan(event.target.value)}
@@ -149,11 +162,12 @@ export default function CreateRegistration() {
                     >{`${item.title} - ${item.duration} meses - R$ ${item.price}`}</option>
                   ))}
                 </select>
+                <Input type="hidden" name="plan_id" value={planId} />
               </label>
             </div>
             <div className="field">
               <label htmlFor="start_date">
-                <span>DATA DE INICIO</span>
+                <strong>DATA DE INICIO</strong>
                 <Input
                   type="date"
                   name="start_date"
@@ -162,11 +176,11 @@ export default function CreateRegistration() {
                 />
               </label>
               <label htmlFor="end_date">
-                <span>DATA DE TÉRMINO</span>
+                <strong>DATA DE TÉRMINO</strong>
                 <Input type="date" name="end_date" value={endDate} readOnly />
               </label>
               <label htmlFor="total">
-                <span>VALOR FINAL</span>
+                <strong>VALOR FINAL</strong>
                 <Input
                   type="number"
                   step="any"
